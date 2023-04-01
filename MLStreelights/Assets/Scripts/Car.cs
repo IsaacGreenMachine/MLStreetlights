@@ -15,7 +15,7 @@ public class Car : MonoBehaviour
         manager = GameObject.Find("manager");
         managerScript = manager.GetComponent<manager>();
         speed = Random.Range(managerScript.carSpeedMin, managerScript.carSpeedMax);
-        direction = managerScript.directions[Random.Range(0, managerScript.directions.Count) - 1]);
+        direction = managerScript.directions[Random.Range(0, managerScript.directions.Count) - 1];
     }
 
     // Update is called once per frame

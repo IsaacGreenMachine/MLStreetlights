@@ -7,8 +7,10 @@ public class manager : MonoBehaviour
     public List<GameObject> car_prefabs = new();
     public List<GameObject> spawn_points = new();
     public List<string> directions = new() {"Left", "Forward", "Right"};
+    public List<string> lightStates = new() { "Green", "Yellow", "Red", "GreenLeftFull", "GreenLeft", "YellowLeftFull", "YellowLeft" };
     public int carSpeedMin;
     public int carSpeedMax;
+    public int yellowDelayTime;
     
     // Start is called before the first frame update
     void Start()

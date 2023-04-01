@@ -357,6 +357,8 @@
 "Assets/Scripts/Car.cs"
 "Assets/Scripts/manager.cs"
 "Assets/Scripts/SpawnPoint.cs"
+"Assets/Scripts/StopLight.cs"
+"Assets/Scripts/StopLightArray.cs"
 -langversion:9.0
 
 /deterministic
