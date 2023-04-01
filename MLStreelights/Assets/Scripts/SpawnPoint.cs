@@ -16,7 +16,7 @@ public class SpawnPoint : MonoBehaviour
         
     }
 
-    GameObject SpawnCar()
+    public GameObject SpawnCar()
     {
         return(null);
     }
