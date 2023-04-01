@@ -354,6 +354,8 @@
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/manager.cs"
 "Assets/Scripts/SpawnPoint.cs"
+"Assets/Scripts/StopLight.cs"
+"Assets/Scripts/StopLightArray.cs"
 -langversion:9.0
 
 /deterministic
