@@ -680,3 +680,4 @@ Cmd: preprocessCompute
 
 Cmd: initializeCompiler
 
+Cmd: shutdown
