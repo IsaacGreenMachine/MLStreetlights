@@ -17,6 +17,8 @@ public class manager : MonoBehaviour
     {
         foreach (GameObject car in Resources.LoadAll("Prefabs"))
             car_prefabs.Add(car);
+        foreach (Transform transformChild in GameObject.Find("SpawnPoints").transform)
+            spawn_points.Add(transformChild.gameObject);
     }
 
     // Update is called once per frame
