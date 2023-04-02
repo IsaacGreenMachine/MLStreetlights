@@ -7,20 +7,18 @@ public class SpawnPoint : MonoBehaviour
 {
     public GameObject manager;
     public manager managerScript;
+    Transform bottom;
     // Start is called before the first frame update
     void Start()
     {
         manager = GameObject.Find("manager");
         managerScript = manager.GetComponent<manager>();
+        bottom = transform.GetChild(0);
     }
 
-    public GameObject GetSpawnCar()
+    public GameObject GetSpawnCar(Vector3 pos)
     {
-        GameObject car = Instantiate(managerScript.car_prefabs[Random.Range(0, managerScript.car_prefabs.Count - 1)]);
-        car.AddComponent<Car>();
-        car.AddComponent<BoxCollider>();
-        car.transform.Rotate(0, 180, 0);
-        return car;
+        return Instantiate(managerScript.car_prefabs[Random.Range(0, managerScript.car_prefabs.Count - 1)], pos, transform.rotation);
     }
 
     public void SpawnCar()
@@ -29,21 +27,20 @@ public class SpawnPoint : MonoBehaviour
 
         Collider[] hitColliders = Physics.OverlapBox(spawn_point.transform.position, spawn_point.transform.localScale / 1.5f);
         foreach(Collider c in hitColliders)
-        {
-            Debug.Log(c.tag);
             if (c.gameObject.CompareTag("car")) return;
-        }
+        GameObject car;
         int coinFlip = Random.Range(0, 2);
-        float offset = spawn_point.transform.localScale.z / 4;
         if (coinFlip == 0)
         {
-            GetSpawnCar().transform.position = spawn_point.transform.position + new Vector3(0, 0, coinFlip);
+            car = GetSpawnCar(transform.GetChild(0).transform.position);
         }
+            
         else
-        {
-            GetSpawnCar().transform.position = spawn_point.transform.position - new Vector3(0, 0, coinFlip);
-        }
-        
+            car = GetSpawnCar(transform.GetChild(1).transform.position);
+        Car carScript = car.GetComponent<Car>();
+        carScript.speed = Random.Range(managerScript.carSpeedMin, managerScript.carSpeedMax);
+        carScript.direction = managerScript.directions[Random.Range(0, 3)];
+        carScript.lane = coinFlip;
     }
 
     // Update is called once per frame

@@ -11,7 +11,11 @@ public class manager : MonoBehaviour
     public int carSpeedMin;
     public int carSpeedMax;
     public int yellowDelayTime;
-    
+    [Range(0, 1)]
+    public float carSpeedModifier;
+    public int FRONT_RAY_START_DISTANCE = 1;
+    public int FRONT_RAY_DISTANCE = 1;
+
     // Start is called before the first frame update
     void Start()
     {
