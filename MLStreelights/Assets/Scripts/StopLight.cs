@@ -7,9 +7,12 @@ public class StopLight : MonoBehaviour
     public GameObject manager;
     public manager managerScript;
     public string lightState;
-    public GameObject greenCover;
-    public GameObject yellowCover;
-    public GameObject redCover;
+    public GameObject greenCoverL;
+    public GameObject yellowCoverL;
+    public GameObject redCoverL;
+    public GameObject greenCoverR;
+    public GameObject yellowCoverR;
+    public GameObject redCoverR;
 
     // Start is called before the first frame update
     void Start()
@@ -33,37 +36,66 @@ public class StopLight : MonoBehaviour
         {
             if (state == "Green")
             {
-                greenCover.SetActive(false);
-                yellowCover.SetActive(true);
-                redCover.SetActive(true);
+                greenCoverL.SetActive(true);
+                yellowCoverL.SetActive(true);
+                redCoverL.SetActive(true);
+                greenCoverR.SetActive(false);
+                yellowCoverR.SetActive(true);
+                redCoverR.SetActive(true);
             }
             else if (state == "Yellow")
             {
-                greenCover.SetActive(true);
-                yellowCover.SetActive(false);
-                redCover.SetActive(true);
+                greenCoverL.SetActive(true);
+                yellowCoverL.SetActive(true);
+                redCoverL.SetActive(true);
+                greenCoverR.SetActive(true);
+                yellowCoverR.SetActive(false);
+                redCoverR.SetActive(true);
             }
             else if (state == "Red")
             {
-                greenCover.SetActive(true);
-                yellowCover.SetActive(true);
-                redCover.SetActive(false);
+                greenCoverL.SetActive(true);
+                yellowCoverL.SetActive(true);
+                redCoverL.SetActive(true);
+                greenCoverR.SetActive(true);
+                yellowCoverR.SetActive(true);
+                redCoverR.SetActive(false);
             }
             else if (state == "GreenLeft")
             {
-
+                greenCoverL.SetActive(false);
+                yellowCoverL.SetActive(true);
+                redCoverL.SetActive(true);
+                greenCoverR.SetActive(true);
+                yellowCoverR.SetActive(true);
+                redCoverR.SetActive(false);
             }
-            else if (state == "Left")
+            else if (state == "GreenLeftFull")
             {
-
+                greenCoverL.SetActive(false);
+                yellowCoverL.SetActive(true);
+                redCoverL.SetActive(true);
+                greenCoverR.SetActive(false);
+                yellowCoverR.SetActive(true);
+                redCoverR.SetActive(true);
             }
-            else if (state == "FlashingYellowLeft")
+            else if (state == "YellowLeft")
             {
-
+                greenCoverL.SetActive(true);
+                yellowCoverL.SetActive(false);
+                redCoverL.SetActive(true);
+                greenCoverR.SetActive(true);
+                yellowCoverR.SetActive(true);
+                redCoverR.SetActive(false);
             }
-            else if (state == "GreenRight")
+            else if (state == "YellowLeftFull")
             {
-
+                greenCoverL.SetActive(true);
+                yellowCoverL.SetActive(false);
+                redCoverL.SetActive(true);
+                greenCoverR.SetActive(true);
+                yellowCoverR.SetActive(false);
+                redCoverR.SetActive(true);
             }
             lightState = state;
         }

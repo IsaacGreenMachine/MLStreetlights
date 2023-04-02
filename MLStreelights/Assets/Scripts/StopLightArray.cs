@@ -30,6 +30,7 @@ public class StopLightArray : MonoBehaviour
     {
         manager = GameObject.Find("manager");
         managerScript = manager.GetComponent<manager>();
+
     }
 
     // Update is called once per frame
