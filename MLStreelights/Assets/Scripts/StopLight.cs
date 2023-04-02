@@ -56,7 +56,7 @@ public class StopLight : MonoBehaviour
             {
                 greenCoverL.SetActive(true);
                 yellowCoverL.SetActive(true);
-                redCoverL.SetActive(true);
+                redCoverL.SetActive(false);
                 greenCoverR.SetActive(true);
                 yellowCoverR.SetActive(true);
                 redCoverR.SetActive(false);

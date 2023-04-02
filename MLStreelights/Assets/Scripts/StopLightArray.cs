@@ -10,6 +10,8 @@ public class StopLightArray : MonoBehaviour
     // N E S W
     public List<GameObject> lights = new();
 
+    public bool currentlySwitching;
+
     public int lightState;
     /*   0 : All Red
      *  *Two Greens and Two Reds*
@@ -30,38 +32,43 @@ public class StopLightArray : MonoBehaviour
     {
         manager = GameObject.Find("manager");
         managerScript = manager.GetComponent<manager>();
-
+        currentlySwitching = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-            ChangeState(0);
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-            ChangeState(1);
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-            ChangeState(2);
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-            ChangeState(3);
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-            ChangeState(4);
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-            ChangeState(5);
-        else if (Input.GetKeyDown(KeyCode.Alpha6))
-            ChangeState(6);
-        else if (Input.GetKeyDown(KeyCode.Alpha7))
-            ChangeState(7);
-        else if (Input.GetKeyDown(KeyCode.Alpha8))
-            ChangeState(8);
+        if (!currentlySwitching)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+                ChangeState(0);
+            else if (Input.GetKeyDown(KeyCode.Alpha1))
+                ChangeState(1);
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+                ChangeState(2);
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+                ChangeState(3);
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+                ChangeState(4);
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+                ChangeState(5);
+            else if (Input.GetKeyDown(KeyCode.Alpha6))
+                ChangeState(6);
+            else if (Input.GetKeyDown(KeyCode.Alpha7))
+                ChangeState(7);
+            else if (Input.GetKeyDown(KeyCode.Alpha8))
+                ChangeState(8);
+        }
     }
     void ChangeState(int state)
     {
-        StartCoroutine(ChangeStateRoutine(state));
+        if (state != lightState) 
+            StartCoroutine(ChangeStateRoutine(state));
     }
 
     IEnumerator ChangeStateRoutine(int state)
     {
+        currentlySwitching = true;
         // switching to yellow light and waiting
         if (lightState == 0)
             yield return new WaitForSeconds(0);
@@ -200,5 +207,6 @@ public class StopLightArray : MonoBehaviour
         }
 
         lightState = state;
+        currentlySwitching = false;
     }
 }
