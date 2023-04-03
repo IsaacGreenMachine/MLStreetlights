@@ -13,9 +13,26 @@ public class manager : MonoBehaviour
     public int yellowDelayTime;
     [Range(0, 1)]
     public float carSpeedModifier;
-    public int FRONT_RAY_START_DISTANCE = 1;
-    public int FRONT_RAY_DISTANCE = 1;
-
+    public float FRONT_RAY_START_DISTANCE;
+    public float HORIZONTAL_RAY_DISTANCE;
+    public float FRONT_RAY_DISTANCE;
+    public float carDetectionDistance;
+    public List<GameObject> paths1 = new();
+    public List<GameObject> paths2 = new();
+    public List<GameObject> paths3 = new();
+    public List<GameObject> paths4 = new();
+    public List<GameObject> paths5 = new();
+    public List<GameObject> paths6 = new();
+    public List<GameObject> paths7 = new();
+    public List<GameObject> paths8 = new();
+    public List<GameObject> paths9 = new();
+    public List<GameObject> paths10 = new();
+    public List<GameObject> paths11 = new();
+    public List<GameObject> paths12 = new();
+    public List<GameObject> paths13 = new();
+    public List<GameObject> paths16 = new();
+    public List<GameObject> paths14 = new();
+    public List<GameObject> paths15 = new();
     // Start is called before the first frame update
     void Start()
     {
