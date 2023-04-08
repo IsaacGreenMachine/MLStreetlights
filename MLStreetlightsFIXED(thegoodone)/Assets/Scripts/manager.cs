@@ -17,6 +17,13 @@ public class manager : MonoBehaviour
     public float HORIZONTAL_RAY_DISTANCE;
     public float FRONT_RAY_DISTANCE;
     public float carDetectionDistance;
+    enum waypointTypes
+    {
+        start,
+        mid,
+        stop,
+    }
+
     public List<GameObject> paths1 = new();
     public List<GameObject> paths2 = new();
     public List<GameObject> paths3 = new();

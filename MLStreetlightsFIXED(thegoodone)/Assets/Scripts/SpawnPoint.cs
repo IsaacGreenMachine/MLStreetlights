@@ -8,6 +8,7 @@ public class SpawnPoint : MonoBehaviour
     public GameObject manager;
     public manager managerScript;
     public List<GameObject> spawn_locations = new();
+    public string pointType;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,8 +36,7 @@ public class SpawnPoint : MonoBehaviour
         carScript.direction = managerScript.directions[Random.Range(0, 3)];
         carScript.lane = lane;
 
-
-        carScript.targetObj = GameObject.Find("target");
+        carScript.targetlist.Add(GameObject.Find("target"));
     }
 
     // Update is called once per frame

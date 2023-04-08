@@ -13,14 +13,23 @@ public class Car : MonoBehaviour
     public bool carInFront;
     public Vector3 target;
     public GameObject targetObj;
+    public List<GameObject> targetlist = new();
+    public float carLength;
+    public float carWidth;
+    public float carHeight;
+    public float distanceToWaypoint;
+
     // Start is called before the first frame update
     void Start()
     {
         manager = GameObject.Find("manager");
         managerScript = manager.GetComponent<manager>();
         speed = Random.Range(managerScript.carSpeedMin, managerScript.carSpeedMax);
-        direction = managerScript.directions[Random.Range(0, managerScript.directions.Count)];
 
+        Vector3 dims = GetComponent<BoxCollider>().bounds.size;
+        carLength = dims.x;
+        carHeight = dims.y;
+        carWidth = dims.z;
     }
 
     RaycastHit createRaycastHit(Vector3 rayStart, float rayDistance, Vector3 direction)
@@ -34,10 +43,25 @@ public class Car : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        target = targetObj.transform.position;
-        transform.position = Vector3.MoveTowards(transform.position, target, 1 * Time.deltaTime);
-        transform.LookAt(target);
-        transform.Rotate(new Vector3(0, -90, 0));
+        if (targetObj)
+        {
+            target = targetObj.transform.position;
+            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            transform.LookAt(target);
+            transform.Rotate(new Vector3(0, -90, 0));
+            distanceToWaypoint = Vector3.Distance(transform.position, targetObj.transform.position) - (carLength / 2f);
+            if (distanceToWaypoint < 0.1f)
+            {
+                targetlist.RemoveAt(0);
+                targetObj = null;
+            }
+        }
+        else
+        {
+            if (targetlist.Count > 0)
+                targetObj = targetlist[0];
+        }
+        
 
         //// Speed
         //transform.position += (managerScript.carSpeedModifier * speed * Time.deltaTime * transform.right);
