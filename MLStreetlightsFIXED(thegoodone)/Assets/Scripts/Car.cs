@@ -10,7 +10,6 @@ public class Car : MonoBehaviour
     public int lanePriority;
     public GameObject manager;
     public manager managerScript;
-    public bool carInFront;
     public Vector3 target;
     public GameObject targetObj;
     public List<GameObject> targetlist = new();
@@ -61,7 +60,7 @@ public class Car : MonoBehaviour
             if (targetlist.Count > 0)
                 targetObj = targetlist[0];
         }
-        
+
 
         //// Speed
         //transform.position += (managerScript.carSpeedModifier * speed * Time.deltaTime * transform.right);
@@ -94,6 +93,36 @@ public class Car : MonoBehaviour
         //if (direction == "right" && lane != 0)
 
 
+    }
+
+    /**
+     * Merges a car into another lane. Assumes another lane's path are indexed similarly
+     * (i.e., that currentPath[4] and newPath[4] are side-by-side points on
+     * the same road)
+     * Returns true if successful and false otherwise.
+     */
+    private bool mergeIntoLane(List<GameObject> newPath)
+    {
+        return true;
+    }
+
+    private bool AtPathPoint ()
+    {
+        float distanceToPoint = Vector3.Distance(
+            transform.position,
+            path[currPathIndex].transform.position
+        );
+        return distanceToPoint < managerScript.AT_PATH_POINT_RADIUS;
+    }
+
+    /**
+     * Returns the next path GameObject, and null if no next path object.
+     */
+    private GameObject GetNextPathPoint()
+    {
+        if (++currPathIndex == path.Count) return null;
+
+        return path[currPathIndex];
     }
 
 }

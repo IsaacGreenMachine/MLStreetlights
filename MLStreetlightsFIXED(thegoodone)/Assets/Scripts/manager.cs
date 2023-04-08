@@ -37,9 +37,11 @@ public class manager : MonoBehaviour
     public List<GameObject> paths11 = new();
     public List<GameObject> paths12 = new();
     public List<GameObject> paths13 = new();
-    public List<GameObject> paths16 = new();
     public List<GameObject> paths14 = new();
     public List<GameObject> paths15 = new();
+    public List<GameObject> paths16 = new();
+
+    public float AT_PATH_POINT_RADIUS = 1.5f;
     // Start is called before the first frame update
     void Start()
     {
