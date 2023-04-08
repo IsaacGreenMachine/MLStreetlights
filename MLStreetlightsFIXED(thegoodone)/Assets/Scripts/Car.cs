@@ -10,9 +10,13 @@ public class Car : MonoBehaviour
     public int lanePriority;
     public GameObject manager;
     public manager managerScript;
-    public bool carInFront;
     public Vector3 target;
     public GameObject targetObj;
+
+    public List<GameObject> path;
+    public short PATH_START_INDEX = 0;
+    private short currPathIndex;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,7 +24,7 @@ public class Car : MonoBehaviour
         managerScript = manager.GetComponent<manager>();
         speed = Random.Range(managerScript.carSpeedMin, managerScript.carSpeedMax);
         direction = managerScript.directions[Random.Range(0, managerScript.directions.Count)];
-
+        currPathIndex = PATH_START_INDEX;
     }
 
     RaycastHit createRaycastHit(Vector3 rayStart, float rayDistance, Vector3 direction)
@@ -70,6 +74,36 @@ public class Car : MonoBehaviour
         //if (direction == "right" && lane != 0)
 
 
+    }
+
+    /**
+     * Merges a car into another lane. Assumes another lane's path are indexed similarly 
+     * (i.e., that currentPath[4] and newPath[4] are side-by-side points on
+     * the same road)
+     * Returns true if successful and false otherwise.
+     */
+    private bool mergeIntoLane(List<GameObject> newPath)
+    {
+        return true;
+    }
+
+    private bool AtPathPoint ()
+    {
+        float distanceToPoint = Vector3.Distance(
+            transform.position, 
+            path[currPathIndex].transform.position
+        );
+        return distanceToPoint < managerScript.AT_PATH_POINT_RADIUS;
+    }
+
+    /**
+     * Returns the next path GameObject, and null if no next path object.
+     */ 
+    private GameObject GetNextPathPoint()
+    {
+        if (++currPathIndex == path.Count) return null;
+
+        return path[currPathIndex];
     }
 
 }
