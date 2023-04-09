@@ -7,8 +7,9 @@ public class SpawnPoint : MonoBehaviour
 {
     public GameObject manager;
     public manager managerScript;
-    public List<GameObject> spawn_locations = new();
-    public string pointType;
+    public string waypointType;
+    public int lane;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,29 +22,38 @@ public class SpawnPoint : MonoBehaviour
         return Instantiate(managerScript.car_prefabs[Random.Range(0, managerScript.car_prefabs.Count - 1)], pos, transform.rotation);
     }
 
-    public void SpawnCar()
+    public void SpawnCar(List<GameObject> path, string direction)
     {
-        GameObject spawn_point = managerScript.spawn_points[Random.Range(0, managerScript.spawn_points.Count)];
-
-        Collider[] hitColliders = Physics.OverlapBox(spawn_point.transform.position, spawn_point.transform.localScale / 1.5f);
+        Collider[] hitColliders = Physics.OverlapBox(transform.position, transform.localScale / 1.5f);
         foreach (Collider c in hitColliders)
             if (c.gameObject.CompareTag("car")) return;
-
-        int lane = Random.Range(0, spawn_locations.Count);
-        GameObject car = GetSpawnCar(spawn_locations[lane].transform.position);
+        GameObject car = GetSpawnCar(transform.position);
         Car carScript = car.GetComponent<Car>();
         carScript.speed = Random.Range(managerScript.carSpeedMin, managerScript.carSpeedMax);
-        carScript.direction = managerScript.directions[Random.Range(0, 3)];
+        carScript.targetlist.AddRange(path);
         carScript.lane = lane;
-
-        carScript.targetlist.Add(GameObject.Find("target"));
+        carScript.moving = true;
+        carScript.direction = direction;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            SpawnCar();
+
+    }
+
+    void OnDrawGizmos()
+    {
+        if (waypointType == "start")
+            Gizmos.color = Color.green;
+        if (waypointType == "mid")
+            Gizmos.color = Color.blue;
+        if (waypointType == "end")
+            Gizmos.color = Color.red;
+        //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
+        if (true)
+            //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
+            Gizmos.DrawWireCube(transform.position, transform.localScale);
     }
 
 }

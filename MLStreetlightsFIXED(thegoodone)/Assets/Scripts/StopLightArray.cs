@@ -60,7 +60,7 @@ public class StopLightArray : MonoBehaviour
                 ChangeState(8);
         }
     }
-    void ChangeState(int state)
+    public void ChangeState(int state)
     {
         if (state != lightState)
             StartCoroutine(ChangeStateRoutine(state));

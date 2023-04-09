@@ -5,9 +5,6 @@ using UnityEngine;
 public class Car : MonoBehaviour
 {
     public int speed;
-    public string direction;
-    public int lane;
-    public int lanePriority;
     public GameObject manager;
     public manager managerScript;
     public Vector3 target;
@@ -17,6 +14,9 @@ public class Car : MonoBehaviour
     public float carWidth;
     public float carHeight;
     public float distanceToWaypoint;
+    public int lane;
+    public bool moving;
+    public string direction;
 
     // Start is called before the first frame update
     void Start()
@@ -42,33 +42,34 @@ public class Car : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (targetObj)
+        if (moving)
         {
-            target = targetObj.transform.position;
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
-            transform.LookAt(target);
-            transform.Rotate(new Vector3(0, -90, 0));
-            distanceToWaypoint = Vector3.Distance(transform.position, targetObj.transform.position) - (carLength / 2f);
-            if (distanceToWaypoint < 0.1f)
+            if (targetObj)
             {
-                targetlist.RemoveAt(0);
-                targetObj = null;
+                target = targetObj.transform.position;
+                transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                transform.LookAt(target);
+                transform.Rotate(new Vector3(0, -90, 0));
+                distanceToWaypoint = Vector3.Distance(transform.position, targetObj.transform.position) - (carLength / 2f);
+                if (distanceToWaypoint < 0.1f)
+                {
+                    if (targetObj.GetComponent<SpawnPoint>().waypointType == "end")
+                        Destroy(this.gameObject);
+                    targetlist.RemoveAt(0);
+                    targetObj = null;
+                }
+            }
+            else
+            {
+                if (targetlist.Count > 0)
+                    targetObj = targetlist[0];
             }
         }
-        else
-        {
-            if (targetlist.Count > 0)
-                targetObj = targetlist[0];
-        }
 
-
-        //// Speed
-        //transform.position += (managerScript.carSpeedModifier * speed * Time.deltaTime * transform.right);
-
-        //// Front raycast
-        //Vector3 frontRayStart = transform.position - (transform.right * managerScript.FRONT_RAY_START_DISTANCE);
-        //RaycastHit frontRay = createRaycastHit(frontRayStart, managerScript.FRONT_RAY_DISTANCE, transform.right);
-
+        // Front raycast
+        Vector3 frontRayStart = transform.position + (transform.right * (carLength/2f));
+        RaycastHit frontRay = createRaycastHit(frontRayStart, managerScript.FRONT_RAY_DISTANCE, transform.right);
+        Debug.DrawLine(frontRayStart, frontRay.point);
         //// Left back raycast
         //Vector3 leftRayStart = transform.position - (transform.forward * managerScript.HORIZONTAL_RAY_DISTANCE);
         //RaycastHit leftRay = createRaycastHit(leftRayStart, managerScript.FRONT_RAY_DISTANCE, transform.forward);
@@ -106,23 +107,19 @@ public class Car : MonoBehaviour
         return true;
     }
 
-    private bool AtPathPoint ()
+    private void OnTriggerStay(Collider other)    
     {
-        float distanceToPoint = Vector3.Distance(
-            transform.position,
-            path[currPathIndex].transform.position
-        );
-        return distanceToPoint < managerScript.AT_PATH_POINT_RADIUS;
+        if (other.gameObject.CompareTag("stopzone"))
+        {
+            string lightState = other.gameObject.transform.parent.GetComponent<StopLight>().lightState;
+            if (lightState == "Green" && direction != "left")
+                moving = true;
+            else if (lightState == "GreenLeftFull")
+                moving = true;
+            else if (lightState == "GreenLeft" && direction == "left")
+                moving = true;
+            else
+                moving = false;    
+        }
     }
-
-    /**
-     * Returns the next path GameObject, and null if no next path object.
-     */
-    private GameObject GetNextPathPoint()
-    {
-        if (++currPathIndex == path.Count) return null;
-
-        return path[currPathIndex];
-    }
-
 }
