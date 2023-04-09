@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using UnityEngine;
 
 public class Car : MonoBehaviour
@@ -10,13 +11,16 @@ public class Car : MonoBehaviour
     public int lanePriority;
     public GameObject manager;
     public manager managerScript;
+
     public Vector3 target;
     public GameObject targetObj;
     public List<GameObject> targetlist = new();
+
     public float carLength;
     public float carWidth;
     public float carHeight;
-    public float distanceToWaypoint;
+
+    private short NULL_VECTOR3_VAL = -9999;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +33,17 @@ public class Car : MonoBehaviour
         carLength = dims.x;
         carHeight = dims.y;
         carWidth = dims.z;
+
+        int randomPathIndex = Random.Range(0, managerScript.straightPaths.Count - 1);
+        targetlist = new List<GameObject>(managerScript.straightPaths[randomPathIndex]);
+
+        // Sets car position as first point in path
+        transform.position = targetlist[0].transform.position;
+        if (targetlist.Count != 0)
+        {
+            targetObj = GetNextTarget();
+            target = targetObj.transform.position;
+        }
     }
 
     RaycastHit createRaycastHit(Vector3 rayStart, float rayDistance, Vector3 direction)
@@ -42,25 +57,34 @@ public class Car : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (targetObj)
+        if (target.x != NULL_VECTOR3_VAL)
         {
-            target = targetObj.transform.position;
+            // Moves car
             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+
+            // Rotates car toward target
             transform.LookAt(target);
             transform.Rotate(new Vector3(0, -90, 0));
-            distanceToWaypoint = Vector3.Distance(transform.position, targetObj.transform.position) - (carLength / 2f);
-            if (distanceToWaypoint < 0.1f)
+
+            if (AtPathPoint())
             {
-                targetlist.RemoveAt(0);
-                targetObj = null;
+                Debug.Log(targetObj);
+                Debug.Log(targetObj.GetComponent<OverlapShow>());
+                string targetType = targetObj.GetComponent<OverlapShow>().pointType;
+                if ((targetType.Contains("left") || targetType.Contains("right")) && direction != "Forward")
+                {
+                    // Determines new path name
+                    targetlist = GetNewPath(targetObj.name);
+                    targetObj = GetNextTarget(false);
+                } else
+                {
+                    targetObj = GetNextTarget();
+                }
+
+                if (!targetObj) Destroy(this);
+                else target = targetObj.transform.position;
             }
         }
-        else
-        {
-            if (targetlist.Count > 0)
-                targetObj = targetlist[0];
-        }
-
 
         //// Speed
         //transform.position += (managerScript.carSpeedModifier * speed * Time.deltaTime * transform.right);
@@ -106,23 +130,44 @@ public class Car : MonoBehaviour
         return true;
     }
 
-    private bool AtPathPoint ()
+    private bool AtPathPoint()
     {
         float distanceToPoint = Vector3.Distance(
             transform.position,
-            path[currPathIndex].transform.position
-        );
+            target
+        );// - (carLength / 2f); // carFront distance
+
         return distanceToPoint < managerScript.AT_PATH_POINT_RADIUS;
     }
 
     /**
-     * Returns the next path GameObject, and null if no next path object.
+     * Returns the next path GameObject, and a Vector3 with all NULL_VECTOR3_VAL values if no 
+     * next path object.
      */
-    private GameObject GetNextPathPoint()
+    private GameObject GetNextTarget(bool remove = true)
     {
-        if (++currPathIndex == path.Count) return null;
-
-        return path[currPathIndex];
+        if (targetlist.Count >= 1 && remove) targetlist.RemoveAt(0);
+        return targetlist.Count != 0 ? targetlist[0] : null;
     }
 
+    private List<GameObject> GetNewPath(string objectName)
+    {
+        switch (objectName)
+        {
+            case "oppzleft": return new List<GameObject>(managerScript.paths11);
+            case "oppzright": return new List<GameObject>(managerScript.paths16);
+            case "xleft": return new List<GameObject>(managerScript.paths13);
+            case "xright": return new List<GameObject>(managerScript.paths10);
+            case "zleft": return new List<GameObject>(managerScript.paths15);
+            case "zright": return new List<GameObject>(managerScript.paths12);
+            case "oppxleft": return new List<GameObject>(managerScript.paths9);
+            case "oppxright": return new List<GameObject>(managerScript.paths14);
+        }
+
+
+
+        return null;
+
+        // managerScript.GetType().GetField("path" + pathIndex).GetValue(this);
+    }
 }

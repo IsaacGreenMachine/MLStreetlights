@@ -18,7 +18,7 @@ public class SpawnPoint : MonoBehaviour
 
     public GameObject GetSpawnCar(Vector3 pos)
     {
-        return Instantiate(managerScript.car_prefabs[Random.Range(0, managerScript.car_prefabs.Count - 1)], pos, transform.rotation);
+        return Instantiate(managerScript.car_prefabs[Random.Range(0, managerScript.car_prefabs.Count - 1)]);
     }
 
     public void SpawnCar()

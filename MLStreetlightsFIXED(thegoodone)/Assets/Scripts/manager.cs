@@ -17,31 +17,28 @@ public class manager : MonoBehaviour
     public float HORIZONTAL_RAY_DISTANCE;
     public float FRONT_RAY_DISTANCE;
     public float carDetectionDistance;
-    enum waypointTypes
-    {
-        start,
-        mid,
-        stop,
-    }
 
-    public List<GameObject> paths1 = new();
+    public List<GameObject> paths1 = new(); // Straight paths
     public List<GameObject> paths2 = new();
     public List<GameObject> paths3 = new();
     public List<GameObject> paths4 = new();
     public List<GameObject> paths5 = new();
     public List<GameObject> paths6 = new();
     public List<GameObject> paths7 = new();
-    public List<GameObject> paths8 = new();
-    public List<GameObject> paths9 = new();
-    public List<GameObject> paths10 = new();
-    public List<GameObject> paths11 = new();
-    public List<GameObject> paths12 = new();
-    public List<GameObject> paths13 = new();
-    public List<GameObject> paths14 = new();
+    public List<GameObject> paths8 = new(); // end Straight paths
+    public List<GameObject> paths9 = new(); // Turning paths in order of spawn point locations
+    public List<GameObject> paths10 = new(); //                        (end path)
+    public List<GameObject> paths11 = new(); //                            |
+    public List<GameObject> paths12 = new(); // (turnning path)           <-
+    public List<GameObject> paths13 = new(); //                            |
+    public List<GameObject> paths14 = new(); //                         (start)
     public List<GameObject> paths15 = new();
-    public List<GameObject> paths16 = new();
+    public List<GameObject> paths16 = new(); // end Turning paths
 
-    public float AT_PATH_POINT_RADIUS = 1.5f;
+    public List<List<GameObject>> straightPaths = new();
+
+    public float AT_PATH_POINT_RADIUS = -2f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +46,9 @@ public class manager : MonoBehaviour
             car_prefabs.Add(car);
         foreach (Transform transformChild in GameObject.Find("SpawnPoints").transform)
             spawn_points.Add(transformChild.gameObject);
+        foreach (List<GameObject> p in new[] { paths1, paths2, paths3, paths4, paths5, paths6, paths7, paths8 })
+            straightPaths.Add(p);
+
     }
 
     // Update is called once per frame

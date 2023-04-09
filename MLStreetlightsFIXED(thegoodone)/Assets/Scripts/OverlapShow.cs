@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class OverlapShow : MonoBehaviour
 {
+
+    public string pointType = "mid";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +22,7 @@ public class OverlapShow : MonoBehaviour
     //Draw the Box Overlap as a gizmo to show where it currently is testing. Click the Gizmos button to see this
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.green;
         //Check that it is being run in Play Mode, so it doesn't try to draw this in Editor mode
         if (true)
             //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
