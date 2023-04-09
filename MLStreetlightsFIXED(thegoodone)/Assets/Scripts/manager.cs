@@ -48,7 +48,6 @@ public class manager : MonoBehaviour
             spawn_points.Add(transformChild.gameObject);
         foreach (List<GameObject> p in new[] { paths1, paths2, paths3, paths4, paths5, paths6, paths7, paths8 })
             straightPaths.Add(p);
-
     }
 
     // Update is called once per frame

@@ -7,7 +7,6 @@ public class SpawnPoint : MonoBehaviour
 {
     public GameObject manager;
     public manager managerScript;
-    public List<GameObject> spawn_locations = new();
     public string pointType;
     // Start is called before the first frame update
     void Start()
@@ -18,7 +17,7 @@ public class SpawnPoint : MonoBehaviour
 
     public GameObject GetSpawnCar(Vector3 pos)
     {
-        return Instantiate(managerScript.car_prefabs[Random.Range(0, managerScript.car_prefabs.Count - 1)]);
+        return Instantiate(managerScript.car_prefabs[Random.Range(0, managerScript.car_prefabs.Count)]);
     }
 
     public void SpawnCar()
@@ -29,12 +28,10 @@ public class SpawnPoint : MonoBehaviour
         foreach (Collider c in hitColliders)
             if (c.gameObject.CompareTag("car")) return;
 
-        int lane = Random.Range(0, spawn_locations.Count);
-        GameObject car = GetSpawnCar(spawn_locations[lane].transform.position);
+        GameObject car = GetSpawnCar(spawn_point.transform.position);
         Car carScript = car.GetComponent<Car>();
         carScript.speed = Random.Range(managerScript.carSpeedMin, managerScript.carSpeedMax);
         carScript.direction = managerScript.directions[Random.Range(0, 3)];
-        carScript.lane = lane;
 
         carScript.targetlist.Add(GameObject.Find("target"));
     }

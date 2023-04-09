@@ -20,8 +20,6 @@ public class Car : MonoBehaviour
     public float carWidth;
     public float carHeight;
 
-    private short NULL_VECTOR3_VAL = -9999;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -57,7 +55,7 @@ public class Car : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (target.x != NULL_VECTOR3_VAL)
+        if (targetObj)
         {
             // Moves car
             transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
@@ -68,10 +66,9 @@ public class Car : MonoBehaviour
 
             if (AtPathPoint())
             {
-                Debug.Log(targetObj);
-                Debug.Log(targetObj.GetComponent<OverlapShow>());
                 string targetType = targetObj.GetComponent<OverlapShow>().pointType;
-                if ((targetType.Contains("left") || targetType.Contains("right")) && direction != "Forward")
+                bool leftOrRight = (targetType.Contains("left") || targetType.Contains("right"));
+                if (leftOrRight && direction != "Forward")
                 {
                     // Determines new path name
                     targetlist = GetNewPath(targetObj.name);
@@ -81,7 +78,7 @@ public class Car : MonoBehaviour
                     targetObj = GetNextTarget();
                 }
 
-                if (!targetObj) Destroy(this);
+                if (targetObj == null) Destroy(this);
                 else target = targetObj.transform.position;
             }
         }
@@ -152,6 +149,7 @@ public class Car : MonoBehaviour
 
     private List<GameObject> GetNewPath(string objectName)
     {
+        Debug.Log(objectName);
         switch (objectName)
         {
             case "oppzleft": return new List<GameObject>(managerScript.paths11);
@@ -162,11 +160,8 @@ public class Car : MonoBehaviour
             case "zright": return new List<GameObject>(managerScript.paths12);
             case "oppxleft": return new List<GameObject>(managerScript.paths9);
             case "oppxright": return new List<GameObject>(managerScript.paths14);
+            default: return null;
         }
-
-
-
-        return null;
 
         // managerScript.GetType().GetField("path" + pathIndex).GetValue(this);
     }

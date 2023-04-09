@@ -5,12 +5,23 @@ using UnityEngine;
 public class OverlapShow : MonoBehaviour
 {
 
-    public string pointType = "mid";
+    public string pointType;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        int leftRightIndex;
+        if ((leftRightIndex = this.name.IndexOf("left")) != -1 
+            || (leftRightIndex = this.name.IndexOf("right")) != -1)
+        { 
+            pointType = this.name[leftRightIndex..] + "mid";
+        } else if (this.name.StartsWith("end"))
+        {
+            pointType = "end";
+        } else
+        {
+            pointType = "mid";
+        }
     }
 
     // Update is called once per frame
